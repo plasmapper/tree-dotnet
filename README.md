@@ -61,7 +61,8 @@
 11. ValueNode\<DateTime\>.Value ⟷ DateTimePicker
 12. ValueNode\<T\>.Value ⟷ TrackBar
 13. ValueNode\<T\>.Value ⟶ ProgressBar
-14. ClassListNode<T> ⟷ DataGridView (with List<Converter>)
+14. ValueListNode<T> ⟷ DataGridView (with Converter)
+15. ClassListNode<T> ⟷ DataGridView (with List<Converter>)
 
 ### Example
 `Example/WinForms` application demonstrates Windows Forms binding functionality.
