@@ -43,11 +43,11 @@ namespace Program
             _bindings.Add(Parameters.Enum, tabControlEnum);
             _bindings.Add(Parameters.Enum, groupBoxEnum);
 
-            _bindings.Add(Parameters.Hex, buttonHex);
+            _bindings.Add(Parameters.Hex, checkBoxHex);
             _bindings[^1].NodeValueChanged += (s, e) =>
             {
                 bool hex = Parameters.Hex.Value;
-                buttonHex.Text = hex ? "HEX" : "DEC";
+                checkBoxHex.Text = hex ? "HEX" : "DEC";
                 integerBinding.Converter = integerPlusOneBinding.Converter = hex ? new HexConverter() : new NodeStringConverter<int>();
                 integerBinding.OnNodeValueChanged();
                 integerPlusOneBinding.OnNodeValueChanged();

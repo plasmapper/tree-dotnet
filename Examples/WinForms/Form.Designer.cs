@@ -38,7 +38,6 @@
             this.comboBoxString = new System.Windows.Forms.ComboBox();
             this.comboBoxEnum = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.buttonHex = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.textBoxFloat = new System.Windows.Forms.TextBox();
             this.textBoxFloatCopy = new System.Windows.Forms.TextBox();
@@ -70,6 +69,7 @@
             this.tabPageRate1 = new System.Windows.Forms.TabPage();
             this.tabPageRate10 = new System.Windows.Forms.TabPage();
             this.tabPageRate100 = new System.Windows.Forms.TabPage();
+            this.checkBoxHex = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewGraphY)).BeginInit();
@@ -180,16 +180,6 @@
             this.label4.Size = new System.Drawing.Size(38, 15);
             this.label4.TabIndex = 1;
             this.label4.Text = "Enum";
-            // 
-            // buttonHex
-            // 
-            this.buttonHex.Location = new System.Drawing.Point(141, 163);
-            this.buttonHex.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.buttonHex.Name = "buttonHex";
-            this.buttonHex.Size = new System.Drawing.Size(115, 27);
-            this.buttonHex.TabIndex = 4;
-            this.buttonHex.Text = "buttonHex";
-            this.buttonHex.UseVisualStyleBackColor = true;
             // 
             // label5
             // 
@@ -499,11 +489,23 @@
             this.tabPageRate100.Text = "x100";
             this.tabPageRate100.UseVisualStyleBackColor = true;
             // 
+            // checkBoxHex
+            // 
+            this.checkBoxHex.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBoxHex.Location = new System.Drawing.Point(141, 163);
+            this.checkBoxHex.Name = "checkBoxHex";
+            this.checkBoxHex.Size = new System.Drawing.Size(116, 25);
+            this.checkBoxHex.TabIndex = 16;
+            this.checkBoxHex.Text = "checkBoxHex";
+            this.checkBoxHex.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.checkBoxHex.UseVisualStyleBackColor = true;
+            // 
             // Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(959, 558);
+            this.Controls.Add(this.checkBoxHex);
             this.Controls.Add(this.tabControlEnum);
             this.Controls.Add(this.groupBoxEnum);
             this.Controls.Add(this.textBoxDataGrid);
@@ -513,7 +515,6 @@
             this.Controls.Add(this.progressBar);
             this.Controls.Add(this.trackBar);
             this.Controls.Add(this.dateTimePicker);
-            this.Controls.Add(this.buttonHex);
             this.Controls.Add(this.comboBoxEnum);
             this.Controls.Add(this.comboBoxString);
             this.Controls.Add(this.textBoxFloatCopy);
@@ -557,7 +558,6 @@
         private System.Windows.Forms.ComboBox comboBoxString;
         private System.Windows.Forms.ComboBox comboBoxEnum;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Button buttonHex;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox textBoxFloat;
         private System.Windows.Forms.TextBox textBoxFloatCopy;
@@ -589,6 +589,7 @@
         private DataGridViewComboBoxColumn columnComplexDataEnum;
         private DataGridView dataGridViewGraphY;
         private DataGridViewTextBoxColumn columnGraphY;
+        private CheckBox checkBoxHex;
     }
 }
 
