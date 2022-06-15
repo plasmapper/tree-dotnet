@@ -1,6 +1,6 @@
 ﻿using PL.Tree;
 
-namespace Program
+namespace WinForms
 {
     internal enum Enum : int { Stop = 0, Rate1 = 1, Rate10 = 10, Rate100 = 100 };
 

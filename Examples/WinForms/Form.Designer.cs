@@ -1,4 +1,4 @@
-﻿namespace Program
+﻿namespace WinForms
 {
     partial class Form
     {
