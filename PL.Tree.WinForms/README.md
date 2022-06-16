@@ -1,5 +1,5 @@
 # PL.Tree.WinForms
-[PL.Tree](../PL.Tree) binding library for Windows Forms.
+PL.Tree binding library for Windows Forms.
 
 ## Features
 1. Bidirectional binding between nodes and controls.
@@ -28,4 +28,4 @@
 15. ClassListNode<T> ⟷ DataGridView (with List<Converter>)
 
 ## Example
-[Examples/WinForms](../Examples/WinForms) application demonstrates Windows Forms binding functionality.
+Examples/WinForms application demonstrates Windows Forms binding functionality.
