@@ -3,6 +3,11 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GenerateDocumentationFile>False</GenerateDocumentationFile>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Version>$(VersionPrefix)</Version>
+    <Authors>plasmapper</Authors>
+    <Company />
+    <PackageProjectUrl>https://github.com/plasmapper/tree-dotnet</PackageProjectUrl>
   </PropertyGroup>
 
 </Project>
