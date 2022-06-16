@@ -25,7 +25,7 @@ namespace PL.Tree
     }
 
     /// <summary>
-    /// Represents bidirectional converter from and to node value.
+    /// Bidirectional converter from and to node value.
     /// </summary>
     /// <typeparam name="NodeValueType">Node value type.</typeparam>
     /// <typeparam name="T">Converted value type.</typeparam>
@@ -56,7 +56,7 @@ namespace PL.Tree
     }
 
     /// <summary>
-    /// Represents bidirectional converter between node and string values.
+    /// Bidirectional converter between node and string values.
     /// </summary>
     /// <typeparam name="NodeValueType">Node value type.</typeparam>
     public class NodeStringConverter<NodeValueType> : Converter<NodeValueType, string>
@@ -97,7 +97,7 @@ namespace PL.Tree
     }
 
     /// <summary>
-    /// Represents bidirectional converter from and to Enum node.
+    /// Bidirectional converter from and to Enum node.
     /// </summary>
     /// <typeparam name="NodeValueType">Node enum value type.</typeparam>
     /// <typeparam name="T">Converted value type.</typeparam>

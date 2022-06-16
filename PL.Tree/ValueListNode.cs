@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace PL.Tree
 {
     /// <summary>
-    /// Represents list with typed items.
+    /// List with typed items.
     /// </summary>
     /// <typeparam name="T">Item type</typeparam>
     public class ValueListNode<T> : Node, IList<T>

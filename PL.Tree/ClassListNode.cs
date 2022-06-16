@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace PL.Tree
 {
     /// <summary>
-    /// Represents list with ClassNode-based items.
+    /// List with ClassNode-based items.
     /// </summary>
     /// <typeparam name="T">Item type.</typeparam>
     public class ClassListNode<T> : ContainerNode, IList<T> where T : ClassNode, new()

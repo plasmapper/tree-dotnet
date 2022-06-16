@@ -3,7 +3,7 @@
 namespace PL.Tree.WinForms
 {
     /// <summary>
-    /// Represents bidirectional node to control binding.
+    /// Bidirectional node to control binding.
     /// </summary>
     public class Binding : IDisposable
     {
@@ -147,7 +147,7 @@ namespace PL.Tree.WinForms
     }
 
     /// <summary>
-    /// Represents bidirectional ValueNode to typed control binding.
+    /// Bidirectional ValueNode to typed control binding.
     /// </summary>
     public class Binding<NodeType, ControlType> : Binding
     {

@@ -3,7 +3,7 @@
 namespace PL.Tree
 {
     /// <summary>
-    /// Represents node with typed value. 
+    /// Node with typed value. 
     /// </summary>
     /// <typeparam name="T">Node value type.</typeparam>
     public class ValueNode<T> : Node
