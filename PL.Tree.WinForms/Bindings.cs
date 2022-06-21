@@ -55,8 +55,8 @@
         /// <returns>Binding.</returns>
         public Binding<T, string> Add<T>(ValueNode<T> node, Control control, string? format = null)
         {
-            Binding<T, string> binding = new(node, control, new NodeStringConverter<T>(format));
-            binding.NodeValueChanged += (s, e) => control.Text = binding.Converter.FromNodeValue(node.Value);
+            Binding<T, string> binding = new(node, control, new StringConverter<T>(format));
+            binding.NodeValueChanged += (s, e) => control.Text = binding.Converter.ConvertSourceToTarget(node.Value);
             Add(binding);
             return binding;
         }
@@ -71,13 +71,13 @@
         /// <returns>Binding.</returns>
         public Binding<T, string> Add<T>(ValueNode<T> node, TextBoxBase control, string? format = null)
         {
-            Binding<T, string> binding = new(node, control, new NodeStringConverter<T>(format));
-            binding.NodeValueChanged += (s, e) => control.Text = binding.Converter.FromNodeValue(node.Value);
+            Binding<T, string> binding = new(node, control, new StringConverter<T>(format));
+            binding.NodeValueChanged += (s, e) => control.Text = binding.Converter.ConvertSourceToTarget(node.Value);
             if (!control.ReadOnly)
             {
                 binding.ControlValueChanged += (s, e) =>
                 {
-                    try { node.Value = binding.Converter.ToNodeValue(control.Text); }
+                    try { node.Value = binding.Converter.ConvertTargetToSource(control.Text); }
                     catch { }
                 };
                 binding.AddControlValueChangedEvent("LostFocus");
@@ -97,8 +97,8 @@
         public Binding<string, string> Add(ValueNode<string> node, ComboBox control)
         {
             Binding<string, string> binding = new(node, control);
-            binding.NodeValueChanged += (s, e) => control.Text = binding.Converter.FromNodeValue(node.Value);
-            binding.ControlValueChanged += (s, e) => node.Value = binding.Converter.ToNodeValue(control.Text);
+            binding.NodeValueChanged += (s, e) => control.Text = binding.Converter.ConvertSourceToTarget(node.Value);
+            binding.ControlValueChanged += (s, e) => node.Value = binding.Converter.ConvertTargetToSource(control.Text);
             AddTextControlKeyDownEvent(binding, control);
             binding.AddControlValueChangedEvent("LostFocus");
             control.SelectedIndexChanged += (s, e) => _loseFocus();
@@ -116,8 +116,8 @@
         public Binding<T, int> Add<T>(ValueNode<T> node, ListControl control)
         {
             Binding<T, int> binding = new(node, control);
-            binding.NodeValueChanged += (s, e) => control.SelectedIndex = binding.Converter.FromNodeValue(node.Value);
-            binding.ControlValueChanged += (s, e) => node.Value = binding.Converter.ToNodeValue(control.SelectedIndex);
+            binding.NodeValueChanged += (s, e) => control.SelectedIndex = binding.Converter.ConvertSourceToTarget(node.Value);
+            binding.ControlValueChanged += (s, e) => node.Value = binding.Converter.ConvertTargetToSource(control.SelectedIndex);
             binding.AddControlValueChangedEvent("SelectedIndexChanged");
             Add(binding);
             return binding;
@@ -132,9 +132,9 @@
         /// <returns>Binding.</returns>
         public Binding<T, int> Add<T>(ValueNode<T> node, ComboBox control) where T : Enum
         {
-            Binding<T, int> binding = new(node, control, new EnumNodeConverter<T, int>());
-            binding.NodeValueChanged += (s, e) => control.SelectedIndex = binding.Converter.FromNodeValue(node.Value);
-            binding.ControlValueChanged += (s, e) => node.Value = binding.Converter.ToNodeValue(control.SelectedIndex);
+            Binding<T, int> binding = new(node, control, new EnumIndexConverter<T>());
+            binding.NodeValueChanged += (s, e) => control.SelectedIndex = binding.Converter.ConvertSourceToTarget(node.Value);
+            binding.ControlValueChanged += (s, e) => node.Value = binding.Converter.ConvertTargetToSource(control.SelectedIndex);
             binding.AddControlValueChangedEvent("SelectedIndexChanged");
             Add(binding);
             return binding;
@@ -149,9 +149,9 @@
         /// <returns>Binding.</returns>
         public Binding<T, int> Add<T>(ValueNode<T> node, TabControl control) where T : Enum
         {
-            Binding<T, int> binding = new(node, control, new EnumNodeConverter<T, int>());
-            binding.NodeValueChanged += (s, e) => control.SelectedIndex = binding.Converter.FromNodeValue(node.Value);
-            binding.ControlValueChanged += (s, e) => node.Value = binding.Converter.ToNodeValue(control.SelectedIndex);
+            Binding<T, int> binding = new(node, control, new EnumIndexConverter<T>());
+            binding.NodeValueChanged += (s, e) => control.SelectedIndex = binding.Converter.ConvertSourceToTarget(node.Value);
+            binding.ControlValueChanged += (s, e) => node.Value = binding.Converter.ConvertTargetToSource(control.SelectedIndex);
             binding.AddControlValueChangedEvent("SelectedIndexChanged");
             Add(binding);
             return binding;
@@ -159,14 +159,14 @@
 
         private Binding<T, int> AddRadioButtonsBinding<T>(ValueNode<T> node, Control control) where T : Enum
         {
-            Binding<T, int> binding = new(node, control, new EnumNodeConverter<T, int>());
-            binding.NodeValueChanged += (s, e) => ((RadioButton)control.Controls[binding.Converter.FromNodeValue(node.Value)]).Checked = true;
+            Binding<T, int> binding = new(node, control, new EnumIndexConverter<T>());
+            binding.NodeValueChanged += (s, e) => ((RadioButton)control.Controls[binding.Converter.ConvertSourceToTarget(node.Value)]).Checked = true;
             binding.ControlValueChanged += (s, e) =>
             {
                 for (int i = 0; i < control.Controls.Count; i++)
                 {
                     if (((RadioButton)control.Controls[i]).Checked)
-                        node.Value = binding.Converter.ToNodeValue(i);
+                        node.Value = binding.Converter.ConvertTargetToSource(i);
                 }
             };
             foreach (var c in control.Controls)
@@ -226,7 +226,7 @@
         public Binding<bool, bool> Add(ValueNode<bool> node, CheckBox control)
         {
             Binding<bool, bool> binding = new(node, control);
-            binding.NodeValueChanged += (s, e) => control.Checked = binding.Converter.FromNodeValue(node.Value);
+            binding.NodeValueChanged += (s, e) => control.Checked = binding.Converter.ConvertSourceToTarget(node.Value);
             binding.ControlValueChanged += (s, e) => node.Value = !node.Value;
             binding.AddControlValueChangedEvent("CheckedChanged");
             Add(binding);
@@ -244,10 +244,10 @@
             Binding<DateTime, DateTime> binding = new(node, control);
             binding.NodeValueChanged += (s, e) =>
             {
-                DateTime dateTime = binding.Converter.FromNodeValue(node.Value);
+                DateTime dateTime = binding.Converter.ConvertSourceToTarget(node.Value);
                 control.Value = (dateTime < control.MinDate) ? control.MinDate : (dateTime > control.MaxDate ? control.MaxDate : dateTime);
             };
-            binding.ControlValueChanged += (s, e) => node.Value = binding.Converter.ToNodeValue(control.Value);
+            binding.ControlValueChanged += (s, e) => node.Value = binding.Converter.ConvertTargetToSource(control.Value);
             binding.AddControlValueChangedEvent("LostFocus");
             AddTextControlKeyDownEvent(binding, control);
             Add(binding);
@@ -264,8 +264,8 @@
         public Binding<T, int> Add<T>(ValueNode<T> node, TrackBar control)
         {
             Binding<T, int> binding = new(node, control);
-            binding.NodeValueChanged += (s, e) => control.Value = binding.Converter.FromNodeValue(node.Value);
-            binding.ControlValueChanged += (s, e) => node.Value = binding.Converter.ToNodeValue(control.Value);
+            binding.NodeValueChanged += (s, e) => control.Value = binding.Converter.ConvertSourceToTarget(node.Value);
+            binding.ControlValueChanged += (s, e) => node.Value = binding.Converter.ConvertTargetToSource(control.Value);
             binding.AddControlValueChangedEvent("ValueChanged");
             Add(binding);
             return binding;
@@ -283,7 +283,7 @@
             Binding<T, int> binding = new(node, control);
             binding.NodeValueChanged += (s, e) =>
             {
-                int value = binding.Converter.FromNodeValue(node.Value);
+                int value = binding.Converter.ConvertSourceToTarget(node.Value);
                 if (value < control.Maximum)
                     control.Value = value + 1;
                 else
@@ -308,12 +308,12 @@
         /// <returns>Binding.</returns>
         public Binding Add<T>(ValueListNode<T> node, DataGridView control, Converter converter)
         {
-            Binding binding = new Binding(node, control);
+            Binding binding = new (node, control);
             binding.NodeValueChanged += (s, e) =>
             {
                 control.Rows.Clear();
                 foreach (var item in node)
-                    control.Rows.Add(new object[] { converter.FromNodeValue(item) });
+                    control.Rows.Add(new object[] { converter.ConvertSourceToTarget(item) });
             };
             binding.ControlValueChanged += (s, e) =>
             {
@@ -323,7 +323,7 @@
                 try
                 {
                     for (int r = 0; r < rowCount; r++)
-                        items.Add((T)converter.ToNodeValue(control.Rows[r].Cells[0].Value));
+                        items.Add((T)converter.ConvertTargetToSource(control.Rows[r].Cells[0].Value));
                     node.SetValue(items);
                 }
                 catch { }                
@@ -362,7 +362,7 @@
                     for (int i = 0; i < converters.Count; i++)
                     {
                         children.MoveNext();
-                        values[i] = converters[i].FromNodeValue(children.Current.GetValue());
+                        values[i] = converters[i].ConvertSourceToTarget(children.Current.GetValue());
                     }
                     control.Rows.Add(values);
                 }
@@ -381,7 +381,7 @@
                         try
                         {
                             children.MoveNext();
-                            children.Current.SetValue(converters[c].ToNodeValue(control.Rows[r].Cells[c].Value));
+                            children.Current.SetValue(converters[c].ConvertTargetToSource(control.Rows[r].Cells[c].Value));
                         }
                         catch { }
                     }

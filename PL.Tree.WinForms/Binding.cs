@@ -8,6 +8,7 @@ namespace PL.Tree.WinForms
     public class Binding : IDisposable
     {
         private readonly Dictionary<string, ControlEventInfo> _controlEvents = new();
+        private List<Converter> _converters = new ();
 
         /// <summary>
         /// Initializes a new instance of the Binding class.
@@ -29,6 +30,23 @@ namespace PL.Tree.WinForms
         /// Gets binding control
         /// </summary>
         public Control Control { get; }
+
+        /// <summary>
+        /// Gets and sets bidirectional converters between node and control values.
+        /// </summary>
+        public List<Converter> Converters
+        {
+            get
+            {
+                lock (this)
+                    return new List<Converter> (_converters);
+            }
+            set
+            {
+                lock (this)
+                    _converters = new List<Converter> (value);
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether node and control events are enabled.
@@ -151,14 +169,15 @@ namespace PL.Tree.WinForms
     /// </summary>
     public class Binding<NodeType, ControlType> : Binding
     {
-        private Converter<NodeType, ControlType> _converter = new();
-
         /// <summary>
         /// Initializes a new instance of the Binding class.
         /// </summary>
         /// <param name="node">Node.</param>
         /// <param name="control">Control.</param>
-        public Binding(ValueNode<NodeType> node, Control control) : base(node, control) { }
+        public Binding(ValueNode<NodeType> node, Control control) : base(node, control)
+        {
+            Converters = new() { new CastConverter<NodeType, ControlType>() };
+        }
 
         /// <summary>
         /// Initializes a new instance of the Binding class.
@@ -169,20 +188,12 @@ namespace PL.Tree.WinForms
         public Binding(ValueNode<NodeType> node, Control control, Converter<NodeType, ControlType> converter) : base(node, control) => Converter = converter;
 
         /// <summary>
-        /// Gets and sets bidirectional converter between node and control values.
+        /// Gets and sets bidirectional converter between node and control values. Same as Converters[0].
         /// </summary>
         public Converter<NodeType, ControlType> Converter
         {
-            get
-            {
-                lock (this)
-                    return _converter;
-            }
-            set
-            {
-                lock (this)
-                    _converter = value;
-            }
+            get => (Converter<NodeType, ControlType>)Converters[0];
+            set => Converters = new() { value };
         }
     }
 

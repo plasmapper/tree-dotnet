@@ -37,8 +37,10 @@ namespace WinForms
 
             var integerBinding = _bindings.Add(Parameters.Integer, textBoxInteger);
             integerBinding.NodeEventsEnabledWhenControlIsFocused = false;
+            integerBinding.Converter = new DecimalOrHexConverter();
             var integerPlusOneBinding = _bindings.Add(Parameters.IntegerPlusOne, textBoxIntegerPlusOne);
-            
+            integerPlusOneBinding.Converter = new DecimalOrHexConverter();
+
             _bindings.Add(Parameters.Enum, comboBoxEnum);
             _bindings.Add(Parameters.Enum, tabControlEnum);
             _bindings.Add(Parameters.Enum, groupBoxEnum);
@@ -46,11 +48,9 @@ namespace WinForms
             _bindings.Add(Parameters.Hex, checkBoxHex);
             _bindings[^1].NodeValueChanged += (s, e) =>
             {
-                bool hex = Parameters.Hex.Value;
-                checkBoxHex.Text = hex ? "HEX" : "DEC";
-                integerBinding.Converter = integerPlusOneBinding.Converter = hex ? new HexConverter() : new NodeStringConverter<int>();
-                integerBinding.OnNodeValueChanged();
-                integerPlusOneBinding.OnNodeValueChanged();
+                checkBoxHex.Text = Parameters.Hex.Value ? "HEX" : "DEC";
+                Parameters.Integer.OnValueChanged();
+                Parameters.IntegerPlusOne.OnValueChanged();
             };
             
             _bindings.Add(Parameters.DateTime, dateTimePicker);
@@ -60,7 +60,7 @@ namespace WinForms
 
             _bindings.Add(Parameters.Graph.X0, textBoxGraphX0);
             _bindings.Add(Parameters.Graph.DX, textBoxGraphDX);
-            _bindings.Add(Parameters.Graph.Y, dataGridViewGraphY, new NodeStringConverter<double>("G3"));
+            _bindings.Add(Parameters.Graph.Y, dataGridViewGraphY, new StringConverter<double>("G3"));
             _bindings.Add(Parameters.NewGraphY, buttonNewGraphY);
 
             _bindings.Add(new(Parameters.Graph, chart));
@@ -81,10 +81,10 @@ namespace WinForms
 
             _bindings.Add(Parameters.ComplexDataList, dataGridView, new()
             {
-                new PL.Tree.Converter<string, string>(),
-                new NodeStringConverter<float>("F1"),
-                new PL.Tree.Converter<bool, bool>(),
-                new EnumNodeConverter<Enum, string>(new () { "Stop", "x1", "x10", "x100" })
+                new CastConverter<string, string>(),
+                new StringConverter<float>("F1"),
+                new CastConverter<bool, bool>(),
+                new EnumConverter<Enum, string>(new () { "Stop", "x1", "x10", "x100" })
             });
 
             _bindings.Add(new(Parameters.ComplexDataList, textBoxDataGrid));
@@ -107,10 +107,10 @@ namespace WinForms
         private void LoseFocus(object? sender, EventArgs e) => LoseFocus();
     }
 
-    internal class HexConverter : PL.Tree.Converter<int, string>
+    internal class DecimalOrHexConverter : PL.Tree.Converter<int, string>
     {
-        public override string FromNodeValue(int nodeValue) => nodeValue.ToString("X");
+        public override string ConvertSourceToTarget(int source) => Parameters.Hex.Value ? source.ToString("X") : source.ToString();
 
-        public override int ToNodeValue(string controlValue) => Convert.ToInt32(controlValue, 16);
+        public override int ConvertTargetToSource(string target) => Parameters.Hex.Value ? Convert.ToInt32(target, 16) : Int32.Parse(target);
     }
 }
