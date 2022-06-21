@@ -111,6 +111,6 @@ namespace WinForms
     {
         public override string ConvertSourceToTarget(int source) => Parameters.Hex.Value ? source.ToString("X") : source.ToString();
 
-        public override int ConvertTargetToSource(string target) => Parameters.Hex.Value ? Convert.ToInt32(target, 16) : Int32.Parse(target);
+        public override int ConvertTargetToSource(string target) => Parameters.Hex.Value ? Convert.ToInt32(target, 16) : int.Parse(target);
     }
 }
